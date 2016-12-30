@@ -310,8 +310,8 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     [self.tableView addSubview:self.refresh];
 
     // Logo en la barra de navegación
-    UIImage * imageShoppiicLogo = [UIImage imageNamed:@"stack-exchange-logo-text"];
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:imageShoppiicLogo];
+    UIImage * imageStackExchangeLogo = [UIImage imageNamed:@"stack-exchange-logo-text"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:imageStackExchangeLogo];
 }
 
 #pragma mark - UITableViewDelegate
