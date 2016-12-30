@@ -16,8 +16,8 @@
 
 + (instancetype)sharedDelegate {
     static AppDelegate *instance;
-    static dispatch_once_t onceToken;
 
+    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     });
@@ -47,8 +47,6 @@
     // MZFormSheetController
     [[MZFormSheetBackgroundWindow appearance] setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
     [[MZFormSheetBackgroundWindow appearance] setBackgroundBlurEffect:NO];
-//    [[MZFormSheetBackgroundWindow appearance] setBlurRadius:2.0f];
-//    [[MZFormSheetBackgroundWindow appearance] setBlurSaturation:1.0f];
     [[MZFormSheetBackgroundWindow appearance] setWindowLevel:MZFormSheetBackgroundWindowLevelBelowStatusBar];
 }
 

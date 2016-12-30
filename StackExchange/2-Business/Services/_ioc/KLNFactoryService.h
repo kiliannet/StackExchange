@@ -8,14 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-/**
- *  Implemented Protocols
- */
-#import "KLNQuestionServiceProtocol.h"
-
-/**
- *  Constants
- */
 static const NSUInteger KLNServicePage = 1;
 static const NSUInteger KLNServicePageSize = 30;
 

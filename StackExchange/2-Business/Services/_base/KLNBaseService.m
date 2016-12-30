@@ -6,6 +6,8 @@
 //  Copyright © 2015 Eduardo Palenzuela Darias. All rights reserved.
 //
 
+#import "KLNBaseService.h"
+
 @implementation KLNBaseService
 
 #pragma mark - Properties

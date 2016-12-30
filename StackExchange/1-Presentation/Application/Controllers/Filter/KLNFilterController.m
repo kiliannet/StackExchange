@@ -12,6 +12,7 @@
 #import "KLNResultModel.h"
 #import "KLNResultsViewController.h"
 #import "MZFormSheetController.h"
+#import "KLNQuestionServiceProtocol.h"
 
 typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     KLNFilterCellFromDate = 0,
@@ -141,9 +142,11 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
         textField.keyboardType = UIKeyboardTypeNumberPad;
     }];
     
-    __weak typeof(self) this = self;
+    __weak typeof(self) weakSelf = self;
     
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        __block typeof(weakSelf) blockSelf = weakSelf;
+
         KLNFilterCell filterCell = (KLNFilterCell) row;
         
         if (filterCell == KLNFilterCellMax) {
@@ -152,7 +155,7 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
             _min = alert.textFields[0].text;
         }
         
-        [this.tableView reloadData];
+        [blockSelf.tableView reloadData];
     }];
     
     [alert addAction:defaultAction];
@@ -168,12 +171,14 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
         textField.keyboardType = UIKeyboardTypeASCIICapable;
     }];
     
-    __weak typeof(self) this = self;
+    __weak typeof(self) weakSelf = self;
     
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        NSString * value = [alert.textFields[0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        __block typeof(weakSelf) blockSelf = weakSelf;
+
+        NSString *value = [alert.textFields[0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         _tags = (value.length > 0) ? value : nil;
-        [this.tableView reloadData];
+        [blockSelf.tableView reloadData];
     }];
     
     [alert addAction:defaultAction];
@@ -200,7 +205,7 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
         : @([_max integerValue]);
     }
     
-    __weak typeof(self) this = self;
+    __weak typeof(self) weakSelf = self;
     
     [_service questionBySite:[KLNFactoryService stringOfDefaultSiteName]
                     fromDate:_fromDate == nil ? nil : @((long) [_fromDate timeIntervalSince1970])
@@ -213,24 +218,27 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
                         page:@(KLNServicePage)
                     pageSize:@(KLNServicePageSize)
                     callback:^(KLNResultModel *item, NSError *error) {
-                        // Loaded
-                        this.navigationItem.rightBarButtonItem = this.buttonRefresh;
+                        __block typeof(weakSelf) blockSelf = weakSelf;
+
+                        blockSelf.navigationItem.rightBarButtonItem = blockSelf.buttonRefresh;
                         
                         // Check error
                         if (error) {
-                            [KLNUtils showNotificationAlertWithMessage:error.localizedDescription inViewController:this];
+                            [KLNUtils showNotificationAlertWithMessage:error.localizedDescription
+                                                      inViewController:blockSelf];
                             return;
                         }
                         
                         // Check row counts
                         if (item.items.count > 0) {
                             // Show results
-                            [this performSegueWithIdentifier:@"ResultsSegue" sender:item];
+                            [blockSelf performSegueWithIdentifier:@"ResultsSegue" sender:item];
                             return;
                         }
                         
                         // No results
-                        [KLNUtils showNotificationWarningWithMessage:NSLocalizedString(@"No results", nil) inViewController:this];
+                        [KLNUtils showNotificationWarningWithMessage:NSLocalizedString(@"No results", nil)
+                                                    inViewController:blockSelf];
                     }];
 }
 - (void)evaluateSort {
@@ -380,10 +388,14 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     formSheet.shouldCenterVertically = YES;
     formSheet.transitionStyle = MZFormSheetTransitionStyleSlideFromBottom;
 
+    __weak typeof(self) weakSelf = self;
+
     formSheet.willPresentCompletionHandler = ^(UIViewController *presentedFSViewController) {
+        __block typeof(weakSelf) blockSelf = weakSelf;
+
         UINavigationController *navController = (UINavigationController *) presentedFSViewController;
         KLNPickerViewController *picker = navController.childViewControllers[0];
-        picker.delegate = self;
+        picker.delegate = blockSelf;
 
         // Comprobamos qué celda se va a visualizar
         switch (filterCell) {

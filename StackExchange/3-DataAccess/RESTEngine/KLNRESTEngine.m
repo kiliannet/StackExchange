@@ -7,6 +7,7 @@
 //
 
 #import <AFNetworkActivityIndicatorManager.h>
+#import "KLNRESTEngine.h"
 
 #define API_BASE_URL @"https://api.stackexchange.com"
 #define API_VERSION @"2.2"
@@ -46,17 +47,19 @@ static const CGFloat HTTPRequestTimeout = 10.0f; // in seconds
         instance.responseSerializer = [AFJSONResponseSerializer serializer];
 
         // Reachability setup
-        NSOperationQueue *operationQueue = instance.operationQueue;
+        __weak typeof(instance.operationQueue) weakOperationQueue = instance.operationQueue;
 
         [[instance reachabilityManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            __block typeof(weakOperationQueue) blockOperationQueue = weakOperationQueue;
+
             switch (status) {
                 case AFNetworkReachabilityStatusReachableViaWWAN:
                 case AFNetworkReachabilityStatusReachableViaWiFi:
-                    [operationQueue setSuspended:NO];
+                    [blockOperationQueue setSuspended:NO];
                     break;
                 case AFNetworkReachabilityStatusNotReachable:
                 default:
-                    [operationQueue setSuspended:YES];
+                    [blockOperationQueue setSuspended:YES];
                     break;
             }
         }];
