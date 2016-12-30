@@ -1,0 +1,19 @@
+//
+//  StackExchange-Prefix.pch
+//  StackExchange
+//
+//  Created by Eduardo Palenzuela Darias on 25/9/15.
+//  Copyright © 2015 Eduardo Palenzuela Darias. All rights reserved.
+//
+
+#ifndef StackExchange_Prefix_pch
+#define StackExchange_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "AppDelegate.h"
+#import "KLNFactoryService.h"
+#import "KLNUtils.h"
+
+#endif /* StackExchange_Prefix_pch */

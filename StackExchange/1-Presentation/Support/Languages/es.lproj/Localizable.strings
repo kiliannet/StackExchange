@@ -1,0 +1,17 @@
+/* Localized versions of Info.plist keys */
+"Select" = "Seleccionar";
+"Acknowledgements" = "Agradecimientos";
+"Max" = "Máx";
+"Min" = "Mín";
+"Enter %@ value" = "Entre el valor %@";
+"Enter tags separated by spaces" = "Introduzca los tags separados por espacios";
+"No results" = "Sin resultados";
+"From date" = "Fecha desde";
+"To date" = "Fecha hasta";
+"Sort" = "Tipo";
+"Tags" = "Tags";
+"Order" = "Orden";
+"The selected Sort doen't accept Min or Max" = "El Tipo seleccionado no permite Máximos ni Mínimos";
+"Results" = "Resultados";
+"Answered" = "Contestadas";
+"Unanswered" = "No contestadas";

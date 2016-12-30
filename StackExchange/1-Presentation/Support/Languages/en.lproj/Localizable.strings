@@ -1,0 +1,17 @@
+/* Localized versions of Info.plist keys */
+"Select" = "Select";
+"Acknowledgements" = "Acknowledgements";
+"Max" = "Max";
+"Min" = "Min";
+"Enter %@ value" = "Enter %@ value";
+"Enter tags separated by spaces" = "Enter tags separated by spaces";
+"No results" = "No results";
+"From date" = "From date";
+"To date" = "To date";
+"Sort" = "Sort";
+"Tags" = "Tags";
+"Order" = "Order";
+"The selected Sort doen't accept Min or Max" = "The selected Sort doen't accept Min or Max";
+"Results" = "Results";
+"Answered" = "Answered";
+"Unanswered" = "Unanswered";
