@@ -24,26 +24,26 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     KLNFilterCellOrder
 };
 
-@interface KLNFilterController () <KLNPickerViewControllerDelegate> {
-@private
-    NSDate *_fromDate;
-    NSDate *_toDate;
-    NSString *_sort;
-    id _max;
-    id _min;
-    NSString *_tags;
-    NSString *_order;
-    id <KLNQuestionServiceProtocol> _service;
-}
+@interface KLNFilterController () <KLNPickerViewControllerDelegate>
 
 #pragma mark - Properties
 
-@property(copy, nonatomic, readonly) UIBarButtonItem *buttonAcknowledgements;
-@property(copy, nonatomic, readonly) UIBarButtonItem *buttonRefresh;
-@property(copy, nonatomic, readonly) UIBarButtonItem *buttonLoading;
-@property(copy, nonatomic, readonly) UIRefreshControl *refresh;
+@property (strong, nonatomic) NSDate *fromDate;
+@property (strong, nonatomic) NSDate *toDate;
+@property (strong, nonatomic) NSString *sort;
+@property (strong, nonatomic) NSString *tags;
+@property (strong, nonatomic) NSString *order;
+@property (strong, nonatomic) id max;
+@property (strong, nonatomic) id min;
 
-@property(assign, nonatomic, readonly) BOOL isNotAcceptedMaxOrMin;
+@property (copy, nonatomic, readonly) UIBarButtonItem *buttonAcknowledgements;
+@property (copy, nonatomic, readonly) UIBarButtonItem *buttonRefresh;
+@property (copy, nonatomic, readonly) UIBarButtonItem *buttonLoading;
+@property (copy, nonatomic, readonly) UIRefreshControl *refresh;
+
+@property (assign, nonatomic, readonly) BOOL isNotAcceptedMaxOrMin;
+
+@property (strong, nonatomic, readonly) id <KLNQuestionServiceProtocol> service;
 
 @end
 
@@ -54,6 +54,7 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     UIBarButtonItem *_buttonRefresh;
     UIBarButtonItem *_buttonLoading;
     UIRefreshControl *_refresh;
+    id <KLNQuestionServiceProtocol> _service;
 }
 
 #pragma mark - Properties
@@ -107,19 +108,29 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
 }
 
 - (BOOL)isNotAcceptedMaxOrMin {
-    return ([_sort isEqualToString:@"hot"] || [_sort isEqualToString:@"week"] || [_sort isEqualToString:@"month"]);
+    return ([self.sort isEqualToString:@"hot"] ||
+            [self.sort isEqualToString:@"week"] ||
+            [self.sort isEqualToString:@"month"]);
+}
+
+- (id <KLNQuestionServiceProtocol>)service {
+    if (!_service) {
+        _service = [KLNFactoryService serviceConformToProtocol:@protocol(KLNQuestionServiceProtocol)];
+    }
+
+    return _service;
 }
 
 #pragma mark - Private methods
 
 - (void)setDefaultValues {
-    _fromDate = nil;
-    _toDate = nil;
-    _sort = [KLNFactoryService arrayOfSorts][0];
-    _max = nil;
-    _min = nil;
-    _tags = nil;
-    _order = [KLNFactoryService arrayOfOrder][0];
+    self.fromDate = nil;
+    self.toDate = nil;
+    self.sort = [KLNFactoryService arrayOfSorts][0];
+    self.max = nil;
+    self.min = nil;
+    self.tags = nil;
+    self.order = [KLNFactoryService arrayOfOrder][0];
     
     [self.tableView reloadData];
     [self.refresh endRefreshing];
@@ -150,9 +161,9 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
         KLNFilterCell filterCell = (KLNFilterCell) row;
         
         if (filterCell == KLNFilterCellMax) {
-            _max = alert.textFields[0].text;
+            blockSelf.max = alert.textFields[0].text;
         } else {
-            _min = alert.textFields[0].text;
+            blockSelf.min = alert.textFields[0].text;
         }
         
         [blockSelf.tableView reloadData];
@@ -177,7 +188,10 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
         __block typeof(weakSelf) blockSelf = weakSelf;
 
         NSString *value = [alert.textFields[0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        _tags = (value.length > 0) ? value : nil;
+        blockSelf.tags = (value.length > 0)
+                ? value
+                : nil;
+
         [blockSelf.tableView reloadData];
     }];
     
@@ -191,75 +205,75 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     
     // Prepare min
     NSNumber * min;
-    if (_min) {
-        min = [_min isKindOfClass:[NSDate class]]
-        ? @((long) [_min timeIntervalSince1970])
-        : @([_min integerValue]);
+    if (self.min) {
+        min = [self.min isKindOfClass:[NSDate class]]
+        ? @((long) [self.min timeIntervalSince1970])
+        : @([self.min integerValue]);
     }
     
     // Prepare max
     NSNumber * max;
-    if (_max) {
-        max = [_max isKindOfClass:[NSDate class]]
-        ? @((long) [_max timeIntervalSince1970])
-        : @([_max integerValue]);
+    if (self.max) {
+        max = [self.max isKindOfClass:[NSDate class]]
+        ? @((long) [self.max timeIntervalSince1970])
+        : @([self.max integerValue]);
     }
     
     __weak typeof(self) weakSelf = self;
     
-    [_service questionBySite:[KLNFactoryService stringOfDefaultSiteName]
-                    fromDate:_fromDate == nil ? nil : @((long) [_fromDate timeIntervalSince1970])
-                      toDate:_toDate == nil ? nil : @((long) [_toDate timeIntervalSince1970])
-                       order:_order
-                         min:min
-                         max:max
-                        sort:_sort
-                      tagged:_tags == nil ? nil : [_tags componentsSeparatedByString:@" "]
-                        page:@(KLNServicePage)
-                    pageSize:@(KLNServicePageSize)
-                    callback:^(KLNResultModel *item, NSError *error) {
-                        __block typeof(weakSelf) blockSelf = weakSelf;
+    [self.service questionBySite:[KLNFactoryService stringOfDefaultSiteName]
+                        fromDate:self.fromDate == nil ? nil : @((long) [self.fromDate timeIntervalSince1970])
+                          toDate:self.toDate == nil ? nil : @((long) [self.toDate timeIntervalSince1970])
+                           order:self.order
+                             min:min
+                             max:max
+                            sort:self.sort
+                          tagged:self.tags == nil ? nil : [self.tags componentsSeparatedByString:@" "]
+                            page:@(KLNServicePage)
+                        pageSize:@(KLNServicePageSize)
+                        callback:^(KLNResultModel *item, NSError *error) {
+                            __block typeof(weakSelf) blockSelf = weakSelf;
 
-                        blockSelf.navigationItem.rightBarButtonItem = blockSelf.buttonRefresh;
+                            blockSelf.navigationItem.rightBarButtonItem = blockSelf.buttonRefresh;
+
+                            // Check error
+                            if (error) {
+                                [KLNUtils showNotificationAlertWithMessage:error.localizedDescription
+                                                          inViewController:blockSelf];
+                                return;
+                            }
+
+                            // Check row counts
+                            if (item.items.count > 0) {
+                                // Show results
+                                [blockSelf performSegueWithIdentifier:@"ResultsSegue" sender:item];
+                                return;
+                            }
                         
-                        // Check error
-                        if (error) {
-                            [KLNUtils showNotificationAlertWithMessage:error.localizedDescription
-                                                      inViewController:blockSelf];
-                            return;
-                        }
-                        
-                        // Check row counts
-                        if (item.items.count > 0) {
-                            // Show results
-                            [blockSelf performSegueWithIdentifier:@"ResultsSegue" sender:item];
-                            return;
-                        }
-                        
-                        // No results
-                        [KLNUtils showNotificationWarningWithMessage:NSLocalizedString(@"No results", nil)
-                                                    inViewController:blockSelf];
-                    }];
+                            // No results
+                            [KLNUtils showNotificationWarningWithMessage:NSLocalizedString(@"No results", nil)
+                                                        inViewController:blockSelf];
+                        }];
 }
 - (void)evaluateSort {
     // Tienen que ser numéricos
-    if ([_sort isEqualToString:@"votes"] && ([_min isKindOfClass:[NSDate class]] || [_max isKindOfClass:[NSDate class]])) {
-        _min = nil;
-        _max = nil;
+    if ([self.sort isEqualToString:@"votes"] && ([self.min isKindOfClass:[NSDate class]] || [self.max isKindOfClass:[NSDate class]])) {
+        self.min = nil;
+        self.max = nil;
         
         return;
     }
     
     if (self.isNotAcceptedMaxOrMin) {
-        _min = nil;
-        _max = nil;
+        self.min = nil;
+        self.max = nil;
         
         return;
     }
     
-    if (![_min isKindOfClass:[NSDate class]] || ![_max isKindOfClass:[NSDate class]]) {
-        _min = nil;
-        _max = nil;
+    if (![self.min isKindOfClass:[NSDate class]] || ![self.max isKindOfClass:[NSDate class]]) {
+        self.min = nil;
+        self.max = nil;
     }
 }
 - (void)buttonAcknowledgementsTapped:(id)sender {
@@ -273,8 +287,6 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    _service = [KLNFactoryService serviceConformToProtocol:@protocol(KLNQuestionServiceProtocol)];
     
     [self setDefaultValues];
     [self setupController];
@@ -313,38 +325,38 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     switch (filterCell) {
         case KLNFilterCellFromDate:
             cell.textLabel.text = NSLocalizedString(@"From date", nil);
-            cell.detailTextLabel.text = (_fromDate == nil) ? @"" : [[KLNUtils dateFormatter] stringFromDate:_fromDate];
+            cell.detailTextLabel.text = (self.fromDate == nil) ? @"" : [[KLNUtils dateFormatter] stringFromDate:self.fromDate];
             iconName = ion_ios_calendar_outline;
             break;
         case KLNFilterCellToDate:
             cell.textLabel.text = NSLocalizedString(@"To date", nil);
-            cell.detailTextLabel.text = (_toDate == nil) ? @"" : [[KLNUtils dateFormatter] stringFromDate:_toDate];
+            cell.detailTextLabel.text = (self.toDate == nil) ? @"" : [[KLNUtils dateFormatter] stringFromDate:self.toDate];
             iconName = ion_ios_calendar_outline;
             break;
         case KLNFilterCellSort:
             cell.textLabel.text = NSLocalizedString(@"Sort", nil);
-            cell.detailTextLabel.text = (_sort == nil) ? @"" : _sort;
+            cell.detailTextLabel.text = (self.sort == nil) ? @"" : self.sort;
             iconName = ion_arrow_swap;
             break;
         case KLNFilterCellMax:
             cell.textLabel.text = NSLocalizedString(@"Max", nil);
-            cell.detailTextLabel.text = [_max isKindOfClass:[NSDate class]] ? [[KLNUtils dateFormatter] stringFromDate:_max] : _max;
+            cell.detailTextLabel.text = [self.max isKindOfClass:[NSDate class]] ? [[KLNUtils dateFormatter] stringFromDate:self.max] : self.max;
             iconName = ion_ios_plus_empty;
             break;
         case KLNFilterCellMin:
             cell.textLabel.text = NSLocalizedString(@"Min", nil);
-            cell.detailTextLabel.text = [_min isKindOfClass:[NSDate class]] ? [[KLNUtils dateFormatter] stringFromDate:_min] : _min;
+            cell.detailTextLabel.text = [self.min isKindOfClass:[NSDate class]] ? [[KLNUtils dateFormatter] stringFromDate:self.min] : self.min;
             iconName = ion_ios_minus_empty;
             break;
         case KLNFilterCellTags:
             cell.textLabel.text = NSLocalizedString(@"Tags", nil);
-            cell.detailTextLabel.text = (_tags == nil) ? @"" : _tags;
+            cell.detailTextLabel.text = (self.tags == nil) ? @"" : self.tags;
             iconName = ion_ios_pricetags_outline;
             break;
         case KLNFilterCellOrder:
             cell.textLabel.text = NSLocalizedString(@"Order", nil);
-            cell.detailTextLabel.text = (_order == nil) ? @"" : _order;
-            iconName = [_order isEqualToString:@"asc"] ? ion_arrow_up_b : ion_arrow_down_b;
+            cell.detailTextLabel.text = (self.order == nil) ? @"" : self.order;
+            iconName = [self.order isEqualToString:@"asc"] ? ion_arrow_up_b : ion_arrow_down_b;
             break;
     }
 
@@ -365,7 +377,7 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
 
     BOOL isMaxOrMinCell = (filterCell == KLNFilterCellMax || filterCell == KLNFilterCellMin);
 
-    if ([_sort isEqualToString:@"votes"] && isMaxOrMinCell) {
+    if ([self.sort isEqualToString:@"votes"] && isMaxOrMinCell) {
         [self showInputMaxOrMinOnRow:indexPath.row];
         return;
     }
@@ -427,25 +439,25 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     // Comprobamos qué celda se va a visualizar
     switch (filterCell) {
         case KLNFilterCellFromDate:
-            _fromDate = pickerView.date;
+            self.fromDate = pickerView.date;
             break;
         case KLNFilterCellToDate:
-            _toDate = pickerView.date;
+            self.toDate = pickerView.date;
             break;
         case KLNFilterCellSort:
-            _sort = pickerView.sort;
+            self.sort = pickerView.sort;
             [self evaluateSort];
             break;
         case KLNFilterCellMax:
-            _max = pickerView.date;
+            self.max = pickerView.date;
             break;
         case KLNFilterCellMin:
-            _min = pickerView.date;
+            self.min = pickerView.date;
             break;
         case KLNFilterCellTags:
             break;
         case KLNFilterCellOrder:
-            _order = pickerView.order;
+            self.order = pickerView.order;
             break;
     }
 
