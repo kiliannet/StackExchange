@@ -8,9 +8,7 @@
 
 #import <AFNetworkActivityIndicatorManager.h>
 #import "KLNRESTEngine.h"
-
-#define API_BASE_URL @"https://api.stackexchange.com"
-#define API_VERSION @"2.2"
+#import "KLNAPISettings.h"
 
 static const CGFloat HTTPRequestTimeout = 10.0f; // in seconds
 
@@ -38,9 +36,7 @@ static const CGFloat HTTPRequestTimeout = 10.0f; // in seconds
         sessionConfiguration.timeoutIntervalForResource = HTTPRequestTimeout;
 
         // Initialize endpoint
-        NSString *baseUrlString = [NSString stringWithFormat:@"%@/%@/", API_BASE_URL, API_VERSION];
-        NSURL *baseUrl = [NSURL URLWithString:baseUrlString];
-        instance = [[KLNRESTEngine alloc] initWithBaseURL:baseUrl sessionConfiguration:sessionConfiguration];
+        instance = [[KLNRESTEngine alloc] initWithBaseURL:[KLNRESTEngine getBaseURL] sessionConfiguration:sessionConfiguration];
 
         // Set serializer JSON
         instance.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -68,6 +64,19 @@ static const CGFloat HTTPRequestTimeout = 10.0f; // in seconds
     });
 
     return instance;
+}
+
+#pragma mark - Private class methods
+
++ (NSURL *)getBaseURL {
+    KLNAPISettings *settings = [KLNAPISettings new];
+
+    NSURLComponents *urlComponents = [NSURLComponents new];
+    urlComponents.scheme = settings.scheme;
+    urlComponents.host = settings.host;
+    urlComponents.path = settings.version;
+
+    return urlComponents.URL;
 }
 
 @end

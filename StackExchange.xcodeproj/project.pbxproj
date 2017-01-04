@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		90188713640D1370607AD388 /* KLNAPISettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 901882F80D811D1501B4B19D /* KLNAPISettings.m */; };
+		90188BC9763C71CE6CC89E22 /* KLNAPISettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 901882F80D811D1501B4B19D /* KLNAPISettings.m */; };
 		A01768A01BB4800700CADEE5 /* Pods-StackExchange-acknowledgements.markdown in Resources */ = {isa = PBXBuildFile; fileRef = A017689E1BB47F1400CADEE5 /* Pods-StackExchange-acknowledgements.markdown */; };
 		A01768A71BB482EF00CADEE5 /* KLNBaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = A01768A61BB482EF00CADEE5 /* KLNBaseService.m */; };
 		A01768B31BB4AF3300CADEE5 /* KLNBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A01768B21BB4AF3300CADEE5 /* KLNBaseTableViewController.m */; };
@@ -65,6 +67,8 @@
 		43F9855569FE93C3C8E5A676 /* Pods-StackExchangeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StackExchangeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StackExchangeTests/Pods-StackExchangeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8BF35C155E750CF7D268EBBF /* libPods-StackExchange.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-StackExchange.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D92D9D40193F94FAB0F493B /* libPods-StackExchangeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-StackExchangeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		901882F80D811D1501B4B19D /* KLNAPISettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLNAPISettings.m; sourceTree = "<group>"; };
+		901889E669B09E85477B218A /* KLNAPISettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLNAPISettings.h; sourceTree = "<group>"; };
 		A017689C1BB47D2500CADEE5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A017689E1BB47F1400CADEE5 /* Pods-StackExchange-acknowledgements.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "Pods-StackExchange-acknowledgements.markdown"; path = "Pods/Target Support Files/Pods-StackExchange/Pods-StackExchange-acknowledgements.markdown"; sourceTree = SOURCE_ROOT; };
 		A01768A51BB482EF00CADEE5 /* KLNBaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLNBaseService.h; sourceTree = "<group>"; };
@@ -170,6 +174,15 @@
 				8D92D9D40193F94FAB0F493B /* libPods-StackExchangeTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9018865673152A65403FE461 /* APISettings */ = {
+			isa = PBXGroup;
+			children = (
+				901882F80D811D1501B4B19D /* KLNAPISettings.m */,
+				901889E669B09E85477B218A /* KLNAPISettings.h */,
+			);
+			path = APISettings;
 			sourceTree = "<group>";
 		};
 		A01768AD1BB4A98D00CADEE5 /* Filter */ = {
@@ -496,6 +509,7 @@
 			isa = PBXGroup;
 			children = (
 				A07E99691BB466E900DFBC30 /* RESTEngine */,
+				9018865673152A65403FE461 /* APISettings */,
 			);
 			path = "3-DataAccess";
 			sourceTree = "<group>";
@@ -879,6 +893,7 @@
 				A01768B61BB4AFAF00CADEE5 /* KLNFilterController.m in Sources */,
 				A01768E51BB4FCD600CADEE5 /* KLNQuestionService.m in Sources */,
 				A05608831BB6BC79006742EC /* KLNResultsViewController.m in Sources */,
+				90188713640D1370607AD388 /* KLNAPISettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -887,6 +902,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A01768E71BB50DB100CADEE5 /* KLNQuestionServiceTests.m in Sources */,
+				90188BC9763C71CE6CC89E22 /* KLNAPISettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
