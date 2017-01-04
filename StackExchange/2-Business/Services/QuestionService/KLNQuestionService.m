@@ -107,9 +107,6 @@ NSString *const KLNQuestionServiceDefaultSiteName = @"stackoverflow";
     NSParameterAssert(order);
     NSParameterAssert(sort);
 
-    // Max and Min accepted
-    NSArray *accepted = [[KLNQuestionService arrayWithAcceptedSorts] objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)]];
-
     NSMutableDictionary *parameters = [@{
             @"site": site,
             @"order": order,
@@ -122,7 +119,9 @@ NSString *const KLNQuestionServiceDefaultSiteName = @"stackoverflow";
     parameters[@"pagesize"] = (pageSize == nil) ? @"" : pageSize;
     parameters[@"tagged"] = (tagged != nil && tagged.count > 0) ? [tagged componentsJoinedByString:@";"] : @"";
 
-    // max and min
+    // Max and Min accepted
+    NSArray *accepted = [[KLNQuestionService arrayWithAcceptedSorts] objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)]];
+
     if ([accepted containsObject:sort]) {
         parameters[@"max"] = (max == nil) ? @"" : max;
         parameters[@"min"] = (min == nil) ? @"" : min;

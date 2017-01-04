@@ -17,8 +17,8 @@
 
 #pragma mark - IBOutlets
 
-@property(weak, nonatomic) IBOutlet UILabel *labelTitle;
-@property(weak, nonatomic) IBOutlet UILabel *labelSubtitle;
-@property(weak, nonatomic) IBOutlet UIImageView *imageProfile;
+@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+@property (weak, nonatomic) IBOutlet UILabel *labelSubtitle;
+@property (weak, nonatomic) IBOutlet UIImageView *imageProfile;
 
 @end

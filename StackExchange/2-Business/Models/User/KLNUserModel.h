@@ -23,36 +23,36 @@
 /**
  *  User identifier.
  */
-@property(copy, nonatomic, readonly) NSNumber *objectId;
+@property (copy, nonatomic, readonly) NSNumber *objectId;
 
 /**
  *  One of unregistered, registered, moderator, or does_not_exist.
  */
-@property(copy, nonatomic, readonly) NSString *type;
+@property (copy, nonatomic, readonly) NSString *type;
 
 /**
  *  User reputation.
  */
-@property(copy, nonatomic, readonly) NSNumber *reputation;
+@property (copy, nonatomic, readonly) NSNumber *reputation;
 
 /**
  *  User accept rate.
  */
-@property(copy, nonatomic, readonly) NSNumber *acceptRate;
+@property (copy, nonatomic, readonly) NSNumber *acceptRate;
 
 /**
  *  User profile image url.
  */
-@property(copy, nonatomic, readonly) NSURL *profileImage;
+@property (copy, nonatomic, readonly) NSURL *profileImage;
 
 /**
  *  User name.
  */
-@property(copy, nonatomic, readonly) NSString *name;
+@property (copy, nonatomic, readonly) NSString *name;
 
 /**
  *  User link.
  */
-@property(copy, nonatomic, readonly) NSURL *link;
+@property (copy, nonatomic, readonly) NSURL *link;
 
 @end

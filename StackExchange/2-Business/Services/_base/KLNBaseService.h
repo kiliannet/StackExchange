@@ -32,6 +32,6 @@ typedef void (^CallbackServiceWithObject)(id item, NSError *error);
 /**
  *  Objeto de acceso a datos.
  */
-@property(copy, nonatomic, readonly) KLNRESTEngine *restEngine;
+@property (copy, nonatomic, readonly) KLNRESTEngine *restEngine;
 
 @end

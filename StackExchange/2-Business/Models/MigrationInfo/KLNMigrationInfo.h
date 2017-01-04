@@ -25,16 +25,16 @@
 /**
  *  MigrationInfo on date.
  */
-@property(copy, nonatomic, readonly) NSDate *onDate;
+@property (copy, nonatomic, readonly) NSDate *onDate;
 
 /**
  *  MigrationInfo other site.
  */
-@property(copy, nonatomic, readonly) KLNSiteModel *otherSite;
+@property (copy, nonatomic, readonly) KLNSiteModel *otherSite;
 
 /**
  *  MigrationInfo question indentifier.
  */
-@property(copy, nonatomic, readonly) NSNumber *questionId;
+@property (copy, nonatomic, readonly) NSNumber *questionId;
 
 @end

@@ -36,7 +36,8 @@ static const CGFloat HTTPRequestTimeout = 10.0f; // in seconds
         sessionConfiguration.timeoutIntervalForResource = HTTPRequestTimeout;
 
         // Initialize endpoint
-        instance = [[KLNRESTEngine alloc] initWithBaseURL:[KLNRESTEngine getBaseURL] sessionConfiguration:sessionConfiguration];
+        NSURL *baseURL = [KLNRESTEngine URLBaseWithSettings:[KLNAPISettings new]];
+        instance = [[KLNRESTEngine alloc] initWithBaseURL:baseURL sessionConfiguration:sessionConfiguration];
 
         // Set serializer JSON
         instance.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -68,9 +69,7 @@ static const CGFloat HTTPRequestTimeout = 10.0f; // in seconds
 
 #pragma mark - Private class methods
 
-+ (NSURL *)getBaseURL {
-    KLNAPISettings *settings = [KLNAPISettings new];
-
++ (NSURL *)URLBaseWithSettings:(KLNAPISettings *)settings {
     NSURLComponents *urlComponents = [NSURLComponents new];
     urlComponents.scheme = settings.scheme;
     urlComponents.host = settings.host;

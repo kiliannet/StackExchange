@@ -28,16 +28,16 @@
 /**
  *  Styling link color.
  */
-@property(copy, nonatomic, readonly) NSString *linkColor;
+@property (copy, nonatomic, readonly) NSString *linkColor;
 
 /**
  *  Styling tag background color.
  */
-@property(copy, nonatomic, readonly) NSString *tagBackgroundColor;
+@property (copy, nonatomic, readonly) NSString *tagBackgroundColor;
 
 /**
  *  Styling tag foreground color.
  */
-@property(copy, nonatomic, readonly) NSString *tagForegroundColor;
+@property (copy, nonatomic, readonly) NSString *tagForegroundColor;
 
 @end

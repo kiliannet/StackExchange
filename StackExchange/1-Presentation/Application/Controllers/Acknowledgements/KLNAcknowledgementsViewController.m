@@ -19,7 +19,7 @@
 
 #pragma mark - Properties
 
-@property(copy, nonatomic, readonly) UIBarButtonItem *buttonClose;
+@property (copy, nonatomic, readonly) UIBarButtonItem *buttonClose;
 
 @end
 

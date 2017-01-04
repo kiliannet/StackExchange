@@ -14,8 +14,8 @@
 
 + (NSDateFormatter *)dateFormatter {
     static NSDateFormatter *dateFormatter;
-    static dispatch_once_t onceToken;
 
+    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:kISO8061DateFormat];

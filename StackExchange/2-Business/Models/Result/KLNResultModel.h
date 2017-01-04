@@ -33,32 +33,32 @@
 /**
  *  Result items.
  */
-@property(copy, nonatomic, readonly) NSArray *items;
+@property (copy, nonatomic, readonly) NSArray *items;
 
 /**
  *  Result has more items.
  */
-@property(copy, nonatomic, readonly) NSNumber *hasMore;
+@property (copy, nonatomic, readonly) NSNumber *hasMore;
 
 /**
  *  Result quota max.
  */
-@property(copy, nonatomic, readonly) NSNumber *quotaMax;
+@property (copy, nonatomic, readonly) NSNumber *quotaMax;
 
 /**
  *  Result quota remaining.
  */
-@property(copy, nonatomic, readonly) NSNumber *quotaRemaining;
+@property (copy, nonatomic, readonly) NSNumber *quotaRemaining;
 
 /**
  *  Result backoff.
  */
-@property(copy, nonatomic, readonly) NSNumber *backoff;
+@property (copy, nonatomic, readonly) NSNumber *backoff;
 
 /**
  *  Error identifier.
  */
-@property(copy, nonatomic, readonly) NSNumber *errorId;
+@property (copy, nonatomic, readonly) NSNumber *errorId;
 
 /**
  *  Error message.
@@ -68,18 +68,18 @@
 /**
  *  Error name.
  */
-@property(copy, nonatomic, readonly) NSString *errorName;
+@property (copy, nonatomic, readonly) NSString *errorName;
 
 #pragma mark - Extra properties
 
 /**
  *  Returns true if there was an error.
  */
-@property(assign, nonatomic, readonly) BOOL hasError;
+@property (assign, nonatomic, readonly) BOOL hasError;
 
 /**
  *  Returns error.
  */
-@property(copy, nonatomic, readonly) NSError *error;
+@property (copy, nonatomic, readonly) NSError *error;
 
 @end

@@ -18,8 +18,8 @@
 
 #pragma mark - Properties
 
-@property(copy, nonatomic, readonly) NSArray *answeredItems;
-@property(copy, nonatomic, readonly) NSArray *unansweredItems;
+@property (copy, nonatomic, readonly) NSArray *answeredItems;
+@property (copy, nonatomic, readonly) NSArray *unansweredItems;
 
 @end
 
@@ -77,21 +77,6 @@
 
     return viewTableSection;
 }
-
-//- (BOOL)hasDataInSection:(NSInteger)section {
-//    // No rows, exit
-//    if (self.items.count == 0) {
-//        return NO;
-//    }
-//
-//    // No rows in answered section, exit
-//    if (section == 0 && self.answeredItems.count == 0) {
-//        return NO;
-//    }
-//
-//    // No rows in unanswered section, exit
-//    return !(section == 1 && self.unansweredItems.count == 0);
-//}
 
 #pragma mark - Livecycle
 
