@@ -7,10 +7,6 @@
 //
 
 #import "KLNQuestionService.h"
-
-/**
- *  Models
- */
 #import "KLNResultModel.h"
 
 #define METHOD_QUESTIONS @"questions"
@@ -32,19 +28,19 @@ NSString *const KLNQuestionServiceDefaultSiteName = @"stackoverflow";
                   page:(NSNumber *)page
               pageSize:(NSNumber *)pageSize
               callback:(CallbackServiceWithObject)callback {
-    // Get URL.
-    NSString *url = [KLNQuestionService stringWithSite:site
-                                              fromDate:fromDate
-                                                toDate:toDate
-                                                 order:order
-                                                   min:min
-                                                   max:max
-                                                  sort:sort
-                                                tagged:tagged
-                                                  page:page
-                                              pageSize:pageSize];
 
-    [self.restEngine GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSDictionary *parameters = [KLNQuestionService dictionaryWithSite:site
+                                                             fromDate:fromDate
+                                                               toDate:toDate
+                                                                order:order
+                                                                  min:min
+                                                                  max:max
+                                                                 sort:sort
+                                                               tagged:tagged
+                                                                 page:page
+                                                             pageSize:pageSize];
+
+    [self.restEngine GET:METHOD_QUESTIONS parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSError *error = nil;
         KLNResultModel *result = [MTLJSONAdapter modelOfClass:KLNResultModel.class
                                            fromJSONDictionary:responseObject error:&error];
@@ -82,7 +78,7 @@ NSString *const KLNQuestionServiceDefaultSiteName = @"stackoverflow";
 #pragma mark - Helpers
 
 /**
- *  Devuelve la URL según los parámetros enviados.
+ *  Returns a NSDictionary with parameters.
  *
  *  @param site     site name
  *  @param fromDate from date
@@ -95,44 +91,44 @@ NSString *const KLNQuestionServiceDefaultSiteName = @"stackoverflow";
  *  @param page     page
  *  @param pageSize page size
  *
- *  @return URL de la petición.
+ *  @return NSDictionary with parameters.
  */
-+ (NSString *)stringWithSite:(NSString *)site
-                    fromDate:(NSNumber *)fromDate
-                      toDate:(NSNumber *)toDate
-                       order:(NSString *)order
-                         min:(NSNumber *)min
-                         max:(NSNumber *)max
-                        sort:(NSString *)sort
-                      tagged:(NSArray *)tagged
-                        page:(NSNumber *)page
-                    pageSize:(NSNumber *)pageSize {
-    // Comprobamos que los campos obligatorios están presentes
++ (NSDictionary *)dictionaryWithSite:(NSString *)site
+                            fromDate:(NSNumber *)fromDate
+                              toDate:(NSNumber *)toDate
+                               order:(NSString *)order
+                                 min:(NSNumber *)min
+                                 max:(NSNumber *)max
+                                sort:(NSString *)sort
+                              tagged:(NSArray *)tagged
+                                page:(NSNumber *)page
+                            pageSize:(NSNumber *)pageSize {
     NSParameterAssert(site);
     NSParameterAssert(order);
     NSParameterAssert(sort);
 
-    // Array que acepta min y max.
+    // Max and Min accepted
     NSArray *accepted = [[KLNQuestionService arrayWithAcceptedSorts] objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)]];
 
-    // Componemos la URL por defecto y agregamos parámetros en caso de que existan.
-    NSMutableString *url = [NSMutableString stringWithFormat:@"%@?site=%@&order=%@&sort=%@", METHOD_QUESTIONS, site, order, sort];
-    [url appendFormat:@"%@", (fromDate == nil)  ? @"" : [NSString stringWithFormat:@"&fromdate=%@", fromDate]];
-    [url appendFormat:@"%@", (toDate == nil)    ? @"" : [NSString stringWithFormat:@"&todate=%@", toDate]];
-    [url appendFormat:@"%@", (page == nil)      ? @"" : [NSString stringWithFormat:@"&page=%@", page]];
-    [url appendFormat:@"%@", (pageSize == nil)  ? @"" : [NSString stringWithFormat:@"&pagesize=%@", pageSize]];
+    NSMutableDictionary *parameters = [@{
+            @"site": site,
+            @"order": order,
+            @"sort": sort
+    } mutableCopy];
 
-    [url appendFormat:@"%@", (tagged != nil && tagged.count > 0)
-            ? [NSString stringWithFormat:@"&tagged=%@", [tagged componentsJoinedByString:@";"]]
-            : @""];
+    parameters[@"fromdate"] = (fromDate == nil) ? @"" : fromDate;
+    parameters[@"todate"] = (toDate == nil) ? @"" : toDate;
+    parameters[@"page"] = (page == nil) ? @"" : page;
+    parameters[@"pagesize"] = (pageSize == nil) ? @"" : pageSize;
+    parameters[@"tagged"] = (tagged != nil && tagged.count > 0) ? [tagged componentsJoinedByString:@";"] : @"";
 
     // max and min
     if ([accepted containsObject:sort]) {
-        [url appendFormat:@"%@", (max == nil) ? @"" : [NSString stringWithFormat:@"&max=%@", max]];
-        [url appendFormat:@"%@", (min == nil) ? @"" : [NSString stringWithFormat:@"&min=%@", min]];
+        parameters[@"max"] = (max == nil) ? @"" : max;
+        parameters[@"min"] = (min == nil) ? @"" : min;
     }
 
-    return [[url lowercaseString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    return [parameters copy];
 }
 
 @end

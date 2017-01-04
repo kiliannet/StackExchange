@@ -158,12 +158,15 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         __block typeof(weakSelf) blockSelf = weakSelf;
 
+        NSString *trimValue = [KLNUtils stringByTrimText:alert.textFields[0].text];
+        NSString *value = trimValue.length > 0 ? trimValue : nil;
+
         KLNFilterCell filterCell = (KLNFilterCell) row;
-        
+
         if (filterCell == KLNFilterCellMax) {
-            blockSelf.max = alert.textFields[0].text;
+            blockSelf.max = value;
         } else {
-            blockSelf.min = alert.textFields[0].text;
+            blockSelf.min = value;
         }
         
         [blockSelf.tableView reloadData];
@@ -199,28 +202,56 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
     
     [self presentViewController:alert animated:YES completion:nil];
 }
+- (void)evaluateSort {
+    // Tienen que ser numéricos
+    if ([self.sort isEqualToString:@"votes"] && ([self.min isKindOfClass:[NSDate class]] || [self.max isKindOfClass:[NSDate class]])) {
+        self.min = nil;
+        self.max = nil;
+        
+        return;
+    }
+    
+    if (self.isNotAcceptedMaxOrMin) {
+        self.min = nil;
+        self.max = nil;
+        
+        return;
+    }
+    
+    if (![self.min isKindOfClass:[NSDate class]] || ![self.max isKindOfClass:[NSDate class]]) {
+        self.min = nil;
+        self.max = nil;
+    }
+}
+- (void)buttonAcknowledgementsTapped:(id)sender {
+    [self showAcknowledgements];
+}
+- (void)buttonRefreshTapped:(id)sender {
+    [self executeRequest];
+}
+
 - (void)executeRequest {
     // Loading
     self.navigationItem.rightBarButtonItem = self.buttonLoading;
-    
+
     // Prepare min
-    NSNumber * min;
+    NSNumber *min;
     if (self.min) {
         min = [self.min isKindOfClass:[NSDate class]]
-        ? @((long) [self.min timeIntervalSince1970])
-        : @([self.min integerValue]);
+                ? @((long) [self.min timeIntervalSince1970])
+                : @([self.min integerValue]);
     }
-    
+
     // Prepare max
-    NSNumber * max;
+    NSNumber *max;
     if (self.max) {
         max = [self.max isKindOfClass:[NSDate class]]
-        ? @((long) [self.max timeIntervalSince1970])
-        : @([self.max integerValue]);
+                ? @((long) [self.max timeIntervalSince1970])
+                : @([self.max integerValue]);
     }
-    
+
     __weak typeof(self) weakSelf = self;
-    
+
     [self.service questionBySite:[KLNFactoryService stringOfDefaultSiteName]
                         fromDate:self.fromDate == nil ? nil : @((long) [self.fromDate timeIntervalSince1970])
                           toDate:self.toDate == nil ? nil : @((long) [self.toDate timeIntervalSince1970])
@@ -249,38 +280,11 @@ typedef NS_ENUM(NSUInteger, KLNFilterCell) {
                                 [blockSelf performSegueWithIdentifier:@"ResultsSegue" sender:item];
                                 return;
                             }
-                        
+
                             // No results
                             [KLNUtils showNotificationWarningWithMessage:NSLocalizedString(@"No results", nil)
                                                         inViewController:blockSelf];
                         }];
-}
-- (void)evaluateSort {
-    // Tienen que ser numéricos
-    if ([self.sort isEqualToString:@"votes"] && ([self.min isKindOfClass:[NSDate class]] || [self.max isKindOfClass:[NSDate class]])) {
-        self.min = nil;
-        self.max = nil;
-        
-        return;
-    }
-    
-    if (self.isNotAcceptedMaxOrMin) {
-        self.min = nil;
-        self.max = nil;
-        
-        return;
-    }
-    
-    if (![self.min isKindOfClass:[NSDate class]] || ![self.max isKindOfClass:[NSDate class]]) {
-        self.min = nil;
-        self.max = nil;
-    }
-}
-- (void)buttonAcknowledgementsTapped:(id)sender {
-    [self showAcknowledgements];
-}
-- (void)buttonRefreshTapped:(id)sender {
-    [self executeRequest];
 }
 
 #pragma mark - Lifecycle

@@ -9,7 +9,7 @@
 #import "KLNQuestionServiceProtocol.h"
 
 /**
- *  External contants
+ *  External constants
  */
 extern NSString *const KLNQuestionServiceDefaultSiteName;
 
