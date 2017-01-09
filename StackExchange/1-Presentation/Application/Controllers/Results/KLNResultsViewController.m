@@ -78,7 +78,7 @@
     return viewTableSection;
 }
 
-#pragma mark - Livecycle
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];

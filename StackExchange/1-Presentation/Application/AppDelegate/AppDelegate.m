@@ -50,7 +50,7 @@
     [[MZFormSheetBackgroundWindow appearance] setWindowLevel:MZFormSheetBackgroundWindowLevelBelowStatusBar];
 }
 
-#pragma mark - Livecycle
+#pragma mark - Lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.

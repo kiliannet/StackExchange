@@ -35,7 +35,7 @@ static const CGFloat KLNResultsCellProfileSize = 44.0f;
     return image;
 }
 
-#pragma mark - Livecycle
+#pragma mark - Lifecycle
 
 - (void)layoutSubviews {
     [super layoutSubviews];

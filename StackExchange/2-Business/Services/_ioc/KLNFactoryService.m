@@ -15,7 +15,7 @@
 
 @implementation KLNFactoryService
 
-#pragma mark - Livecycle
+#pragma mark - Lifecycle
 
 + (void)initialize {
     [super initialize];

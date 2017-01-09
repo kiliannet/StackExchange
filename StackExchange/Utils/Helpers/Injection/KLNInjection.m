@@ -12,7 +12,7 @@ static NSMutableDictionary *mappings;
 
 @implementation KLNInjection
 
-#pragma mark - Livecycle
+#pragma mark - Lifecycle
 
 + (void)initialize {
     [super initialize];
